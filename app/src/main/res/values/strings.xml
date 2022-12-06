@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Bear</string>
+
+    <string-array name="instrument">
+        <item>Guitar</item>
+        <item>Ney</item>
+    </string-array>
+
 </resources>

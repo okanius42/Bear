@@ -10,7 +10,6 @@
         android:id="@+id/bearF"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        app:srcCompat="@drawable/bear"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         />
@@ -27,7 +26,6 @@
         android:id="@+id/somewords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Some words"
         app:layout_constraintStart_toEndOf="@id/bearF"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="75dp"

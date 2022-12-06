@@ -15,9 +15,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.okanius.bear.databinding.ActivityUploadBinding;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.HashMap;
@@ -25,9 +27,9 @@ import java.util.HashMap;
 public class UploadActivity extends AppCompatActivity {
     private ActivityUploadBinding binding;
     FirebaseUser firebaseUser;
-    FirebaseFirestore firebaseFirestore;
     FirebaseStorage firebaseStorage;
-
+    FirebaseFirestore firebaseFirestore;
+    DocumentReference documentReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,17 +37,37 @@ public class UploadActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseStorage = FirebaseStorage.getInstance();
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        firebaseStorage = FirebaseStorage.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
+        String email = firebaseUser.getEmail();
+        documentReference = firebaseFirestore.collection("users").document(email);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentSnapshot = task.getResult();
+                    if(documentSnapshot.exists()){
+                        binding.usernameU.setText((String) "nick : " + documentSnapshot.getData().get("username"));
+                        Picasso.get().load((String) documentSnapshot.getData().get("profilePhotoUri")).into(binding.bearU);
+                    }
+                }
+            }
+        });
     }
 
-    DocumentReference documentReference;
+    public class arrays {
+
+    }
+
+
     Calendar calendar;
     int day,month,year,hour,minute,second;
-    Uri photoUri;
+
     public void share(View view){
         String email = firebaseUser.getEmail();
-        String comment = binding.commentU.getText().toString();
         HashMap<String,Object> post = new HashMap<>();
-        post.put("comment",comment);
 
         calendar = Calendar.getInstance();
         day = calendar.get(Calendar.DAY_OF_MONTH); post.put("day",day);
